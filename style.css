@@ -1,0 +1,243 @@
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    padding: 30px 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: radial-gradient(circle at top, #263326 0%, #151815 45%, #101210 100%);
+    color: #e8e8e8;
+    min-height: 100vh;
+}
+
+.container { max-width: 900px; margin: auto; }
+
+.header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+.small-title { font-size: 11px; letter-spacing: 3px; color: #9aa58d; }
+h1 { margin: 7px 0; font-size: 30px; letter-spacing: 1px; color: #d4af37; }
+#currentDate { margin: 0; color: #aaa; font-size: 14px; }
+
+.streak-box {
+    width: 105px; height: 105px; border: 1px solid #4d5d42; border-radius: 12px;
+    background: rgba(45, 55, 45, 0.8); display: flex; flex-direction: column;
+    align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+.streak-box span { font-size: 22px; }
+.streak-box strong { font-size: 25px; color: #d4af37; }
+.streak-box small { font-size: 9px; color: #999; letter-spacing: 1px; }
+
+.daily-goal {
+    display: flex; gap: 18px; align-items: center; padding: 22px; margin-bottom: 20px;
+    border-left: 4px solid #d4af37; background: linear-gradient(135deg, rgba(212, 175, 55, 0.12), rgba(50, 60, 45, 0.5)); border-radius: 10px;
+}
+.goal-icon { width: 45px; height: 45px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #d4af37; border: 1px solid #d4af37; font-size: 20px; flex-shrink: 0; }
+.section-label { font-size: 10px; letter-spacing: 2px; color: #8f9a84; font-weight: bold; }
+.daily-goal h2 { margin: 5px 0; font-size: 19px; }
+.daily-goal p { margin: 5px 0 0; color: #999; font-size: 13px; }
+
+.progress-panel { padding: 25px; margin-bottom: 50px; background: #222722; border: 1px solid #343b34; border-radius: 12px; }
+.progress-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; }
+.score { font-size: 34px; color: #d4af37; font-weight: bold; margin-top: 5px; }
+.task-count { text-align: right; color: #aaa; font-size: 16px; }
+.task-count strong { color: #fff; font-size: 20px; }
+.task-count small { display: block; font-size: 9px; letter-spacing: 1px; margin-top: 3px; }
+
+.progress-bar { width: 100%; height: 10px; background: #111411; border-radius: 20px; overflow: hidden; }
+#progressFill { width: 0%; height: 100%; background: linear-gradient(90deg, #4a5d23, #d4af37); border-radius: 20px; transition: width 0.5s ease; }
+#progressText { color: #888; font-size: 12px; margin-bottom: 0; }
+
+.timeline { position: relative; margin-left: 30px; border-left: 3px solid #4a5d23; padding-left: 35px; }
+.timeline-item { position: relative; margin-bottom: 50px; opacity: 0; transform: translateY(35px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.timeline-item.show { opacity: 1; transform: translateY(0); }
+.timeline-item::before { content: ''; position: absolute; width: 17px; height: 17px; left: -45px; top: 7px; background: #d4af37; border: 4px solid #182018; border-radius: 50%; box-shadow: 0 0 0 2px #4a5d23; }
+.time { position: absolute; left: -115px; top: 3px; width: 65px; text-align: right; font-size: 13px; font-weight: bold; color: #d4af37; }
+
+.content { background: linear-gradient(145deg, #292e29, #202420); border: 1px solid #363d36; border-radius: 12px; padding: 22px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25); transition: transform 0.3s ease, border-color 0.3s ease; }
+.card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.period { font-size: 9px; letter-spacing: 2px; color: #7f8c74; font-weight: bold; }
+.content h3 { margin: 5px 0 0; color: #fff; font-size: 20px; }
+.card-icon { color: #d4af37; font-size: 22px; }
+.description { color: #999; font-size: 13px; line-height: 1.5; margin: 10px 0 18px; }
+
+.tasks { display: flex; flex-direction: column; gap: 8px; }
+.task-check { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 7px; cursor: pointer; background: rgba(255, 255, 255, 0.025); color: #ccc; font-size: 13px; transition: background 0.2s ease, color 0.2s ease; }
+.task-check input { width: 18px; height: 18px; accent-color: #4a5d23; cursor: pointer; }
+
+.content.completed { border-color: #4a5d23; }
+.content.completed .task-check input { accent-color: #d4af37; }
+.task-check:has(input:checked) { color: #65745c; text-decoration: line-through; background: rgba(74, 93, 35, 0.12); }
+
+.report-panel { margin-top: 20px; padding: 25px; background: #202520; border: 1px solid #343b34; border-radius: 12px; }
+.report-panel h2 { margin: 5px 0 20px; font-size: 22px; }
+.report-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.report-box { padding: 18px; background: #181c18; border-radius: 8px; text-align: center; }
+.report-box span { display: block; color: #d4af37; font-size: 20px; margin-bottom: 5px; }
+.report-box strong { display: block; font-size: 25px; color: #fff; }
+.report-box small { color: #888; font-size: 10px; }
+
+.evaluation { margin-top: 25px; text-align: center; }
+.evaluation p { color: #aaa; font-size: 13px; }
+.evaluation-buttons { display: flex; justify-content: center; gap: 10px; }
+.evaluation-btn { border: 1px solid #4d5d42; background: transparent; color: #bbb; padding: 10px 25px; border-radius: 6px; cursor: pointer; transition: 0.3s; }
+#evaluationResult { min-height: 18px; color: #d4af37; }
+
+.bottom-actions { text-align: center; margin: 30px 0; }
+.reset-btn { padding: 11px 22px; border: 1px solid #593c3c; border-radius: 6px; background: transparent; color: #a98282; cursor: pointer; transition: 0.3s; }
+
+footer { text-align: center; padding: 25px 0; color: #555; font-size: 10px; letter-spacing: 2px; }
+
+/* MOBİL VE HOVER DÜZENLEMELERİ */
+@media (hover: hover) {
+    .content:hover { transform: translateY(-3px); border-color: #59674d; }
+    .task-check:hover { background: rgba(212, 175, 55, 0.08); color: #fff; }
+    .evaluation-btn:hover { background: #4a5d23; color: white; }
+    .reset-btn:hover { background: #492e2e; color: #fff; }
+}
+
+@media (max-width: 650px) {
+    body { padding: 20px 10px; }
+    .header { align-items: flex-start; }
+    h1 { font-size: 23px; }
+    .streak-box { width: 80px; height: 80px; }
+    .daily-goal { align-items: flex-start; }
+    .progress-top { align-items: flex-start; }
+    .timeline { margin-left: 20px; padding-left: 25px; }
+    .time { position: static; text-align: left; margin-bottom: 8px; width: auto; font-size: 12px; }
+    .timeline-item::before { left: -35px; }
+    .report-grid { grid-template-columns: 1fr; }
+}
+
+/* =========================================
+   ÜST PANEL SAĞ GRUP HİZALAMASI (Saat + Seri)
+   ========================================= */
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 25px; /* İkisi arasındaki boşluk */
+}
+
+/* =========================================
+   HİBRİT TAKTİK SAAT STİLLERİ (Analog + Dijital)
+   ========================================= */
+.analog-clock {
+    width: 105px; /* Rakamlar ve dijital ekran için biraz büyütüldü */
+    height: 105px;
+    border: 3px solid #4a5d23;
+    border-radius: 50%;
+    position: relative;
+    background: #151815;
+    box-shadow: 0 0 15px rgba(212, 175, 55, 0.1), inset 0 0 8px rgba(0,0,0,0.8);
+}
+
+/* Tüm Saat Rakamları */
+.num {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    color: #7f8c74; 
+    font-size: 11px;
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    z-index: 5;
+}
+
+/* Rakamları Daire Etrafına Matematiksel Dizme */
+.num-1  { transform: translate(-50%, -50%) rotate(30deg) translate(0, -40px) rotate(-30deg); }
+.num-2  { transform: translate(-50%, -50%) rotate(60deg) translate(0, -40px) rotate(-60deg); }
+.num-3  { transform: translate(-50%, -50%) rotate(90deg) translate(0, -40px) rotate(-90deg); }
+.num-4  { transform: translate(-50%, -50%) rotate(120deg) translate(0, -40px) rotate(-120deg); }
+.num-5  { transform: translate(-50%, -50%) rotate(150deg) translate(0, -40px) rotate(-150deg); }
+.num-6  { transform: translate(-50%, -50%) rotate(180deg) translate(0, -40px) rotate(-180deg); }
+.num-7  { transform: translate(-50%, -50%) rotate(210deg) translate(0, -40px) rotate(-210deg); }
+.num-8  { transform: translate(-50%, -50%) rotate(240deg) translate(0, -40px) rotate(-240deg); }
+.num-9  { transform: translate(-50%, -50%) rotate(270deg) translate(0, -40px) rotate(-270deg); }
+.num-10 { transform: translate(-50%, -50%) rotate(300deg) translate(0, -40px) rotate(-300deg); }
+.num-11 { transform: translate(-50%, -50%) rotate(330deg) translate(0, -40px) rotate(-330deg); }
+.num-12 { transform: translate(-50%, -50%) rotate(360deg) translate(0, -40px) rotate(-360deg); }
+
+/* Merkezdeki Küçük Dijital Ekran */
+.inner-digital {
+    position: absolute;
+    top: 67%; /* Merkezin biraz altında, 6 rakamının üstünde */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #d4af37;
+    font-size: 11px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: bold;
+    letter-spacing: 1px;
+    z-index: 4; /* İbrelerin altında kalması için */
+    background: rgba(21, 24, 21, 0.7);
+    padding: 2px 5px;
+    border-radius: 4px;
+    border: 1px solid #363d36;
+}
+
+/* İbrelerin ortak özellikleri */
+.hand {
+    position: absolute;
+    bottom: 50%; 
+    left: 50%;
+    transform-origin: bottom center;
+    border-radius: 4px;
+    z-index: 10;
+}
+
+.hour-hand { width: 4px; height: 26px; margin-left: -2px; background: #d4af37; }
+.minute-hand { width: 2px; height: 38px; margin-left: -1px; background: #e8e8e8; }
+.second-hand { width: 2px; height: 44px; margin-left: -1px; background: #c0392b; }
+
+.center-dot {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 10px; height: 10px;
+    background: #d4af37;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 15;
+    box-shadow: 0 0 4px rgba(0,0,0,0.8);
+}
+
+@media (max-width: 650px) {
+    .analog-clock { width: 90px; height: 90px; }
+    .inner-digital { font-size: 9px; padding: 1px 3px; }
+    .num-1  { transform: translate(-50%, -50%) rotate(30deg) translate(0, -35px) rotate(-30deg); }
+    .num-2  { transform: translate(-50%, -50%) rotate(60deg) translate(0, -35px) rotate(-60deg); }
+    .num-3  { transform: translate(-50%, -50%) rotate(90deg) translate(0, -35px) rotate(-90deg); }
+    .num-4  { transform: translate(-50%, -50%) rotate(120deg) translate(0, -35px) rotate(-120deg); }
+    .num-5  { transform: translate(-50%, -50%) rotate(150deg) translate(0, -35px) rotate(-150deg); }
+    .num-6  { transform: translate(-50%, -50%) rotate(180deg) translate(0, -35px) rotate(-180deg); }
+    .num-7  { transform: translate(-50%, -50%) rotate(210deg) translate(0, -35px) rotate(-210deg); }
+    .num-8  { transform: translate(-50%, -50%) rotate(240deg) translate(0, -35px) rotate(-240deg); }
+    .num-9  { transform: translate(-50%, -50%) rotate(270deg) translate(0, -35px) rotate(-270deg); }
+    .num-10 { transform: translate(-50%, -50%) rotate(300deg) translate(0, -35px) rotate(-300deg); }
+    .num-11 { transform: translate(-50%, -50%) rotate(330deg) translate(0, -35px) rotate(-330deg); }
+    .num-12 { transform: translate(-50%, -50%) rotate(360deg) translate(0, -35px) rotate(-360deg); }
+}
+
+/* =========================================
+   ZAMAN MODÜLÜ (SAAT + TARİH) STİLLERİ
+   ========================================= */
+.time-module {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Saat ve tarihi ortalar */
+    gap: 8px; /* Saat ile tarih arasındaki boşluk */
+    
+    /* İNCE AYAR (Sola ve Aşağı Kaydırma) */
+    position: relative;
+    top: 15px;    /* Aşağı kaydırmak için bu rakamı artır (örn: 25px) */
+    right: 20px;  /* Sola kaydırmak için bu rakamı artır (örn: 35px) */
+}
+
+.date-badge {
+    color: #8f9a84; 
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    background: rgba(45, 55, 45, 0.5); 
+    padding: 4px 8px;
+    border-radius: 4px;
+    border: 1px solid #363d36;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
