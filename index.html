@@ -3,8 +3,11 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
+
+<meta name="theme-color" content="#151815">
+<meta name="description" content="Günlük disiplin ve kişisel gelişim takip paneli">
 
 <title>Günlük Disiplin Paneli</title>
 
@@ -15,442 +18,545 @@
 
 <body>
 
-
 <div class="container">
 
-    <!-- ÜST PANEL -->
-    <header class="header">
-        
-        <!-- Sol Taraf (Sadece Başlıklar) -->
-        <div>
-            <span class="small-title">KİŞİSEL GELİŞİM SİSTEMİ</span>
-            <h1>GÜNLÜK DİSİPLİN PANELİ</h1>
+<!-- ================================
+     ÜST PANEL
+================================= -->
+<header class="header">
+
+    <div class="header-title">
+        <span class="small-title">KİŞİSEL GELİŞİM SİSTEMİ</span>
+
+        <h1>GÜNLÜK DİSİPLİN PANELİ</h1>
+
+        <div class="header-line"></div>
+    </div>
+
+    <div class="header-right">
+
+        <!-- SERİ -->
+        <div class="streak-box">
+            <span class="streak-fire">🔥</span>
+
+            <strong id="streak">0</strong>
+
+            <small>GÜNLÜK SERİ</small>
         </div>
 
-        <!-- Sağ Taraf (Seri Kutusu ve Zaman Modülü) -->
-        <div class="header-right">
-            
-            <!-- 1. Günlük Seri Kutusu -->
-            <div class="streak-box">
-                <span>🔥</span>
-                <strong id="streak">0</strong>
-                <small>GÜNLÜK SERİ</small>
-            </div>
+        <!-- SAAT + TARİH -->
+        <div class="time-module">
 
-            <!-- 2. Zaman Modülü (Saat ve Tarih Bir Arada) -->
-            <div class="time-module">
-                <!-- Hibrit Taktik Saat -->
-                <div class="analog-clock">
-                    <span class="num num-1">1</span>
-                    <span class="num num-2">2</span>
-                    <span class="num num-3">3</span>
-                    <span class="num num-4">4</span>
-                    <span class="num num-5">5</span>
-                    <span class="num num-6">6</span>
-                    <span class="num num-7">7</span>
-                    <span class="num num-8">8</span>
-                    <span class="num num-9">9</span>
-                    <span class="num num-10">10</span>
-                    <span class="num num-11">11</span>
-                    <span class="num num-12">12</span>
-                    
-                    <div class="inner-digital" id="innerDigital">00:00</div>
-                    
-                    <div class="hand hour-hand" id="hourHand"></div>
-                    <div class="hand minute-hand" id="minuteHand"></div>
-                    <div class="hand second-hand" id="secondHand"></div>
-                    <div class="center-dot"></div>
-                </div>
-                
-                <!-- Alt kısımdaki Tarih -->
-                <div id="currentDate" class="date-badge"></div>
-            </div>
+            <div class="analog-clock">
 
-        </div>
+                <span class="num num-1">1</span>
+                <span class="num num-2">2</span>
+                <span class="num num-3">3</span>
+                <span class="num num-4">4</span>
+                <span class="num num-5">5</span>
+                <span class="num num-6">6</span>
+                <span class="num num-7">7</span>
+                <span class="num num-8">8</span>
+                <span class="num num-9">9</span>
+                <span class="num num-10">10</span>
+                <span class="num num-11">11</span>
+                <span class="num num-12">12</span>
 
-    </header>
-        
-
-    </header>
-
-
-    <!-- GÜNÜN HEDEFİ -->
-    <section class="daily-goal">
-
-        <div class="goal-icon">★</div>
-
-        <div>
-            <span class="section-label">BUGÜNÜN HEDEFİ</span>
-
-            <h2>
-                Görev tamamlanmadan gün bitmez.
-            </h2>
-
-            <p>
-                Disiplin, yapmak istediğin şeyi değil,
-                yapman gereken şeyi zamanında yapmaktır.
-            </p>
-        </div>
-
-    </section>
-
-
-    <!-- İLERLEME PANELİ -->
-    <section class="progress-panel">
-
-        <div class="progress-top">
-
-            <div>
-                <span class="section-label">
-                    BUGÜNÜN DİSİPLİN PUANI
-                </span>
-
-                <div class="score" id="score">
-                    0/100
-                </div>
-            </div>
-
-            <div class="task-count">
-                <strong id="completedCount">0</strong>
-                /
-                <span id="totalCount">0</span>
-
-                <small>TAMAMLANAN GÖREV</small>
-            </div>
-
-        </div>
-
-
-        <div class="progress-bar">
-            <div id="progressFill"></div>
-        </div>
-
-        <p id="progressText">
-            Güne başlayalım.
-        </p>
-
-    </section>
-
-
-    <!-- GÜNLÜK PROGRAM -->
-
-    <div class="timeline">
-
-
-        <!-- SABAH -->
-        <div class="timeline-item">
-
-            <div class="time">
-                06:00
-            </div>
-
-            <div class="content">
-
-                <div class="card-header">
-
-                    <div>
-                        <span class="period">SABAH</span>
-
-                        <h3>
-                            Güne Başlangıç
-                        </h3>
-                    </div>
-
-                    <span class="card-icon">☀</span>
-
+                <div
+                    class="inner-digital"
+                    id="innerDigital">
+                    00:00
                 </div>
 
-
-                <p class="description">
-                    Güne düzenli ve kontrollü bir şekilde başla.
-                </p>
-
-
-                <div class="tasks">
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Kalkış saatine uy</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Yatağını ve odanı düzenle</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Kişisel bakımını tamamla</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Sabah egzersizini yap</span>
-                    </label>
-
+                <div
+                    class="hand hour-hand"
+                    id="hourHand">
                 </div>
+
+                <div
+                    class="hand minute-hand"
+                    id="minuteHand">
+                </div>
+
+                <div
+                    class="hand second-hand"
+                    id="secondHand">
+                </div>
+
+                <div class="center-dot"></div>
 
             </div>
 
-        </div>
-
-
-        <!-- EĞİTİM -->
-        <div class="timeline-item">
-
-            <div class="time">
-                08:30
-            </div>
-
-            <div class="content">
-
-                <div class="card-header">
-
-                    <div>
-                        <span class="period">EĞİTİM</span>
-
-                        <h3>
-                            Akademik ve Mesleki Gelişim
-                        </h3>
-                    </div>
-
-                    <span class="card-icon">◆</span>
-
-                </div>
-
-
-                <p class="description">
-                    Günün ana çalışma dönemini verimli kullan.
-                </p>
-
-
-                <div class="tasks">
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Derslerine zamanında başla</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>En az 1 saat odaklı çalışma yap</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Kodlama / proje çalışması yap</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Günün konularını tekrar et</span>
-                    </label>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- AKŞAM -->
-        <div class="timeline-item">
-
-            <div class="time">
-                17:00
-            </div>
-
-            <div class="content">
-
-                <div class="card-header">
-
-                    <div>
-                        <span class="period">AKŞAM</span>
-
-                        <h3>
-                            Fiziksel ve Kişisel Gelişim
-                        </h3>
-                    </div>
-
-                    <span class="card-icon">▲</span>
-
-                </div>
-
-
-                <p class="description">
-                    Günün ikinci bölümünü gelişimine ayır.
-                </p>
-
-
-                <div class="tasks">
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Antrenmanını tamamla</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Çalışma alanını düzenle</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Kitap / kişisel gelişim oku</span>
-                    </label>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- GÜN SONU -->
-        <div class="timeline-item">
-
-            <div class="time">
-                22:30
-            </div>
-
-            <div class="content">
-
-                <div class="card-header">
-
-                    <div>
-                        <span class="period">GÜN SONU</span>
-
-                        <h3>
-                            Günlük Değerlendirme
-                        </h3>
-                    </div>
-
-                    <span class="card-icon">✓</span>
-
-                </div>
-
-
-                <p class="description">
-                    Günü kapatmadan önce yarın için hazırlığını tamamla.
-                </p>
-
-
-                <div class="tasks">
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Yarın için hazırlık yap</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Telefon kullanımını kontrol et</span>
-                    </label>
-
-                    <label class="task-check">
-                        <input type="checkbox" class="routine-cb">
-                        <span>Uyku saatine uy</span>
-                    </label>
-
-                </div>
-
+            <div
+                id="currentDate"
+                class="date-badge">
             </div>
 
         </div>
 
     </div>
 
+</header>
 
-    <!-- GÜN SONU RAPORU -->
-    <section class="report-panel">
 
-        <div class="section-label">
-            GÜN SONU RAPORU
-        </div>
+<!-- ================================
+     GÜNÜN HEDEFİ
+================================= -->
+<section class="daily-goal">
+
+    <div class="goal-icon">
+        ★
+    </div>
+
+    <div class="goal-content">
+
+        <span class="section-label">
+            BUGÜNÜN HEDEFİ
+        </span>
 
         <h2>
-            Bugün nasıldı?
+            Görev tamamlanmadan gün bitmez.
         </h2>
 
-        <div class="report-grid">
+        <p>
+            Disiplin, yapmak istediğin şeyi değil,
+            yapman gereken şeyi zamanında yapmaktır.
+        </p>
 
-            <div class="report-box">
-                <span>✓</span>
-                <strong id="reportCompleted">0</strong>
-                <small>Tamamlanan görev</small>
-            </div>
+    </div>
 
-            <div class="report-box">
-                <span>○</span>
-                <strong id="reportRemaining">0</strong>
-                <small>Kalan görev</small>
-            </div>
+</section>
 
-            <div class="report-box">
-                <span>★</span>
-                <strong id="reportScore">0</strong>
-                <small>Disiplin puanı</small>
+
+<!-- ================================
+     İLERLEME PANELİ
+================================= -->
+<section class="progress-panel">
+
+    <div class="progress-top">
+
+        <div class="score-area">
+
+            <span class="section-label">
+                BUGÜNÜN DİSİPLİN PUANI
+            </span>
+
+            <div
+                class="score"
+                id="score">
+                0/100
             </div>
 
         </div>
 
+        <div class="task-count">
 
-        <div class="evaluation">
+            <div class="task-count-number">
+                <strong id="completedCount">0</strong>
 
-            <p>
-                Bugün planıma sadık kaldım mı?
+                <span>/</span>
+
+                <span id="totalCount">0</span>
+            </div>
+
+            <small>
+                TAMAMLANAN GÖREV
+            </small>
+
+        </div>
+
+    </div>
+
+    <div
+        class="progress-bar"
+        aria-label="Günlük ilerleme">
+
+        <div
+            id="progressFill">
+        </div>
+
+    </div>
+
+    <p id="progressText">
+        Güne başlayalım.
+    </p>
+
+</section>
+
+
+<!-- ================================
+     GÜNLÜK PROGRAM
+================================= -->
+<main class="timeline">
+
+
+    <!-- SABAH -->
+    <article class="timeline-item">
+
+        <div class="time">
+            06:00
+        </div>
+
+        <div class="content">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <span class="period">
+                        SABAH
+                    </span>
+
+                    <h3>
+                        Güne Başlangıç
+                    </h3>
+
+                </div>
+
+                <span class="card-icon">
+                    ☀
+                </span>
+
+            </div>
+
+            <p class="description">
+                Güne düzenli ve kontrollü bir şekilde başla.
             </p>
 
-            <div class="evaluation-buttons">
+            <div class="tasks">
 
-                <button
-                    class="evaluation-btn"
-                    onclick="setEvaluation('evet')">
-                    EVET
-                </button>
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Kalkış saatine uy</span>
+                </label>
 
-                <button
-                    class="evaluation-btn"
-                    onclick="setEvaluation('hayir')">
-                    HAYIR
-                </button>
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Yatağını ve odanı düzenle</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Kişisel bakımını tamamla</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Sabah egzersizini yap</span>
+                </label>
 
             </div>
 
-            <p id="evaluationResult"></p>
+        </div>
+
+    </article>
+
+
+    <!-- EĞİTİM -->
+    <article class="timeline-item">
+
+        <div class="time">
+            08:30
+        </div>
+
+        <div class="content">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <span class="period">
+                        EĞİTİM
+                    </span>
+
+                    <h3>
+                        Akademik ve Mesleki Gelişim
+                    </h3>
+
+                </div>
+
+                <span class="card-icon">
+                    ◆
+                </span>
+
+            </div>
+
+            <p class="description">
+                Günün ana çalışma dönemini verimli kullan.
+            </p>
+
+            <div class="tasks">
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Derslerine zamanında başla</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>En az 1 saat odaklı çalışma yap</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Kodlama / proje çalışması yap</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Günün konularını tekrar et</span>
+                </label>
+
+            </div>
 
         </div>
 
-    </section>
+    </article>
 
 
-    <!-- ALT BUTONLAR -->
-    <div class="bottom-actions">
+    <!-- AKŞAM -->
+    <article class="timeline-item">
 
-        <button
-            class="reset-btn"
-            onclick="resetDay()">
+        <div class="time">
+            17:00
+        </div>
 
-            ↻ GÜNÜ SIFIRLA
+        <div class="content">
 
-        </button>
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <span class="period">
+                        AKŞAM
+                    </span>
+
+                    <h3>
+                        Fiziksel ve Kişisel Gelişim
+                    </h3>
+
+                </div>
+
+                <span class="card-icon">
+                    ▲
+                </span>
+
+            </div>
+
+            <p class="description">
+                Günün ikinci bölümünü gelişimine ayır.
+            </p>
+
+            <div class="tasks">
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Antrenmanını tamamla</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Çalışma alanını düzenle</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Kitap / kişisel gelişim oku</span>
+                </label>
+
+            </div>
+
+        </div>
+
+    </article>
+
+
+    <!-- GÜN SONU -->
+    <article class="timeline-item">
+
+        <div class="time">
+            22:30
+        </div>
+
+        <div class="content">
+
+            <div class="card-header">
+
+                <div class="card-title">
+
+                    <span class="period">
+                        GÜN SONU
+                    </span>
+
+                    <h3>
+                        Günlük Değerlendirme
+                    </h3>
+
+                </div>
+
+                <span class="card-icon">
+                    ✓
+                </span>
+
+            </div>
+
+            <p class="description">
+                Günü kapatmadan önce yarın için hazırlığını tamamla.
+            </p>
+
+            <div class="tasks">
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Yarın için hazırlık yap</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Telefon kullanımını kontrol et</span>
+                </label>
+
+                <label class="task-check">
+                    <input type="checkbox" class="routine-cb">
+                    <span>Uyku saatine uy</span>
+                </label>
+
+            </div>
+
+        </div>
+
+    </article>
+
+</main>
+
+
+<!-- ================================
+     GÜN SONU RAPORU
+================================= -->
+<section class="report-panel">
+
+    <span class="section-label">
+        GÜN SONU RAPORU
+    </span>
+
+    <h2>
+        Bugün nasıldı?
+    </h2>
+
+    <div class="report-grid">
+
+        <div class="report-box">
+
+            <span>✓</span>
+
+            <strong id="reportCompleted">
+                0
+            </strong>
+
+            <small>
+                Tamamlanan görev
+            </small>
+
+        </div>
+
+        <div class="report-box">
+
+            <span>○</span>
+
+            <strong id="reportRemaining">
+                0
+            </strong>
+
+            <small>
+                Kalan görev
+            </small>
+
+        </div>
+
+        <div class="report-box">
+
+            <span>★</span>
+
+            <strong id="reportScore">
+                0
+            </strong>
+
+            <small>
+                Disiplin puanı
+            </small>
+
+        </div>
 
     </div>
 
 
-    <footer>
+    <div class="evaluation">
 
         <p>
-            DOĞRU DİSİPLİN • DOĞRU GELİŞİM
+            Bugün planıma sadık kaldım mı?
         </p>
 
-    </footer>
+        <div class="evaluation-buttons">
+
+            <button
+                type="button"
+                class="evaluation-btn"
+                onclick="setEvaluation('evet')">
+                EVET
+            </button>
+
+            <button
+                type="button"
+                class="evaluation-btn"
+                onclick="setEvaluation('hayir')">
+                HAYIR
+            </button>
+
+        </div>
+
+        <p
+            id="evaluationResult"
+            aria-live="polite">
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- ================================
+     ALT BUTON
+================================= -->
+<div class="bottom-actions">
+
+    <button
+        type="button"
+        class="reset-btn"
+        onclick="resetDay()">
+
+        <span>↻</span>
+
+        GÜNÜ SIFIRLA
+
+    </button>
 
 </div>
 
 
-<script src="script.js"></script>
+<!-- ================================
+     FOOTER
+================================= -->
+<footer>
 
+    <p>
+        DOĞRU DİSİPLİN <span>•</span> DOĞRU GELİŞİM
+    </p>
+
+</footer>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>

@@ -1,241 +1,953 @@
-/* =========================================
-   GÜNLÜK DİSİPLİN PANELİ - GÜNCELLENMİŞ
-   ========================================= */
+/* =========================================================
+GÜNLÜK DİSİPLİN PANELİ
+JAVASCRIPT
+========================================================= */
 
-// 1. TARİH VE GÜN ANAHTARI YÖNETİMİ
-const currentDateElement = document.getElementById("currentDate");
-const today = new Date();
+/* =========================================================
+ELEMENTLER
+========================================================= */
+
+const currentDateElement =
+document.getElementById("currentDate");
+
+const checkboxes =
+document.querySelectorAll(".routine-cb");
+
+const totalCount =
+checkboxes.length;
+
+const totalCountElement =
+document.getElementById("totalCount");
+
+const scoreElement =
+document.getElementById("score");
+
+const completedCountElement =
+document.getElementById("completedCount");
+
+const progressFillElement =
+document.getElementById("progressFill");
+
+const progressTextElement =
+document.getElementById("progressText");
+
+const reportCompletedElement =
+document.getElementById("reportCompleted");
+
+const reportRemainingElement =
+document.getElementById("reportRemaining");
+
+const reportScoreElement =
+document.getElementById("reportScore");
+
+const evaluationResultElement =
+document.getElementById("evaluationResult");
+
+const streakElement =
+document.getElementById("streak");
+
+const innerDigitalElement =
+document.getElementById("innerDigital");
+
+const hourHandElement =
+document.getElementById("hourHand");
+
+const minuteHandElement =
+document.getElementById("minuteHand");
+
+const secondHandElement =
+document.getElementById("secondHand");
+
+/* =========================================================
+TARİH
+========================================================= */
 
 function getDateKey(date) {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+
+const year =
+    date.getFullYear();
+
+const month =
+    String(date.getMonth() + 1)
+        .padStart(2, "0");
+
+const day =
+    String(date.getDate())
+        .padStart(2, "0");
+
+return `${year}-${month}-${day}`;
+
 }
 
-const currentDateKey = getDateKey(today);
-
-if (currentDateElement) {
-    const dateText = today.toLocaleDateString("tr-TR", {
-        weekday: "long", year: "numeric", month: "long", day: "numeric"
-    });
-    currentDateElement.textContent = dateText.toUpperCase();
+function getToday() {
+return new Date();
 }
 
-// 2. CHECKBOX'LARI BUL
-const checkboxes = document.querySelectorAll(".routine-cb");
-const totalCount = checkboxes.length;
-const totalCountElement = document.getElementById("totalCount");
-if (totalCountElement) totalCountElement.textContent = totalCount;
+let today = getToday();
 
-// 3. GECE YARISI HATASI (MIDNIGHT BUG) KONTROLÜ VE VERİ ÇEKME
-const savedDate = localStorage.getItem("savedDate");
+let currentDateKey =
+getDateKey(today);
+
+/* Tarihi ekrana yaz */
+
+function updateDateDisplay() {
+
+
+if (!currentDateElement) {
+    return;
+}
+
+const dateText =
+    today.toLocaleDateString(
+        "tr-TR",
+        {
+            weekday: "long",
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        }
+    );
+
+currentDateElement.textContent =
+    dateText.toUpperCase();
+
+
+}
+
+/* =========================================================
+GÖREV SAYISI
+========================================================= */
+
+if (totalCountElement) {
+totalCountElement.textContent = totalCount;
+}
+
+/* =========================================================
+GÜNLÜK VERİLERİ YÜKLE
+========================================================= */
+
+let savedDate =
+localStorage.getItem("savedDate");
+
 let savedTasks = [];
 
+/*
+Yeni güne geçildiyse:
+- Görevleri temizle
+- Değerlendirmeyi temizle
+Ancak streak bilgisine dokunma.
+
+*/
+
 if (savedDate !== currentDateKey) {
-    // Yeni güne geçilmişse eski görevleri ve değerlendirmeyi sıfırla
-    localStorage.removeItem("dailyTasks");
-    localStorage.removeItem("dailyEvaluation");
-    localStorage.setItem("savedDate", currentDateKey);
-    savedTasks = [];
+
+localStorage.removeItem("dailyTasks");
+
+localStorage.removeItem("dailyEvaluation");
+
+localStorage.setItem(
+    "savedDate",
+    currentDateKey
+);
+
+savedTasks = [];
+
+
 } else {
-    // Aynı gün içindeysek kayıtlı görevleri getir
-    try {
-        savedTasks = JSON.parse(localStorage.getItem("dailyTasks")) || [];
-    } catch (error) {
-        savedTasks = [];
-    }
+
+
+try {
+
+    savedTasks =
+        JSON.parse(
+            localStorage.getItem("dailyTasks")
+        ) || [];
+
+} catch (error) {
+
+    savedTasks = [];
+
 }
 
-// Daha önce işaretlenen görevleri ekrana yansıt
-checkboxes.forEach((box, index) => {
-    box.checked = savedTasks[index] === true;
-});
 
-// 4. GÜNLÜK SERİ DEĞİŞKENLERİ
-let streak = Number(localStorage.getItem("streak")) || 0;
-let lastCompletedDate = localStorage.getItem("lastCompletedDate");
+}
+
+/* Kayıtlı görevleri checkbox'lara aktar */
+
+checkboxes.forEach(
+(box, index) => {
+
+    box.checked =
+    savedTasks[index] === true;
+
+}
+
+);
+
+/* =========================================================
+STREAK
+========================================================= */
+
+let streak =
+Number(
+localStorage.getItem("streak")
+) || 0;
+
+let lastCompletedDate =
+localStorage.getItem(
+"lastCompletedDate"
+);
 
 function updateStreakDisplay() {
-    const streakElement = document.getElementById("streak");
-    if (streakElement) streakElement.textContent = streak;
+
+
+if (!streakElement) {
+    return;
 }
 
-// 5. GÖREVLERİ GÜNCELLE VE PUAN HESAPLA
+streakElement.textContent =
+    streak;
+
+}
+
+/* =========================================================
+GÖREVLERİ GÜNCELLE
+========================================================= */
+
 function updateTasks() {
-    let completed = 0;
 
-    checkboxes.forEach(box => {
-        const content = box.closest(".content");
+let completed = 0;
+
+
+/*
+    Tamamlanan görevleri say
+*/
+
+checkboxes.forEach(
+    (box) => {
+
+        const content =
+            box.closest(".content");
+
+
         if (box.checked) {
+
             completed++;
-            if (content) content.classList.add("completed");
+
+            if (content) {
+                content.classList.add(
+                    "completed"
+                );
+            }
+
         } else {
-            if (content) content.classList.remove("completed");
+
+            if (content) {
+                content.classList.remove(
+                    "completed"
+                );
+            }
+
         }
-    });
 
-    // Görev durumunu kaydet
-    const taskState = Array.from(checkboxes).map(box => box.checked);
-    localStorage.setItem("dailyTasks", JSON.stringify(taskState));
-    localStorage.setItem("savedDate", currentDateKey); // Garantiye almak için tarihi tekrar kaydet
-
-    // Puan hesapla
-    let percentage = 0;
-    if (totalCount > 0) {
-        percentage = Math.round((completed / totalCount) * 100);
     }
+);
 
-    // Arayüzü güncelle
-    document.getElementById("score").textContent = percentage + "/100";
-    document.getElementById("completedCount").textContent = completed;
-    document.getElementById("progressFill").style.width = percentage + "%";
-    document.getElementById("reportCompleted").textContent = completed;
-    document.getElementById("reportRemaining").textContent = totalCount - completed;
-    document.getElementById("reportScore").textContent = percentage;
 
-    const progressText = document.getElementById("progressText");
-    if (progressText) {
-        if (percentage === 0) progressText.textContent = "Güne başlayalım.";
-        else if (percentage < 30) progressText.textContent = "Başlangıç yapıldı. Devam et.";
-        else if (percentage < 60) progressText.textContent = "İyi gidiyorsun. Planı bırakma.";
-        else if (percentage < 90) progressText.textContent = "Günün büyük kısmı tamamlandı.";
-        else if (percentage < 100) progressText.textContent = "Son görevler kaldı. Tamamla.";
-        else progressText.textContent = "★ BUGÜNÜN TÜM GÖREVLERİ TAMAMLANDI ★";
-    }
+/*
+    Görevleri kaydet
+*/
+
+const taskState =
+    Array.from(
+        checkboxes
+    ).map(
+        box => box.checked
+    );
+
+
+localStorage.setItem(
+    "dailyTasks",
+    JSON.stringify(taskState)
+);
+
+localStorage.setItem(
+    "savedDate",
+    currentDateKey
+);
+
+
+/*
+    Yüzde hesapla
+*/
+
+let percentage = 0;
+
+
+if (totalCount > 0) {
+
+    percentage =
+        Math.round(
+            (completed / totalCount) * 100
+        );
+
 }
 
-// Event Listener Ekle
-checkboxes.forEach(box => {
-    box.addEventListener("change", updateTasks);
-});
 
-// 6. GÜN SONU DEĞERLENDİRMESİ VE SERİ (STREAK) MANTIĞI
+/*
+    Ana puan
+*/
+
+if (scoreElement) {
+
+    scoreElement.textContent =
+        `${percentage}/100`;
+
+}
+
+
+/*
+    Tamamlanan görev
+*/
+
+if (completedCountElement) {
+
+    completedCountElement.textContent =
+        completed;
+
+}
+
+
+/*
+    Progress bar
+*/
+
+if (progressFillElement) {
+
+    progressFillElement.style.width =
+        `${percentage}%`;
+
+}
+
+
+/*
+    Rapor
+*/
+
+if (reportCompletedElement) {
+
+    reportCompletedElement.textContent =
+        completed;
+
+}
+
+
+if (reportRemainingElement) {
+
+    reportRemainingElement.textContent =
+        totalCount - completed;
+
+}
+
+
+if (reportScoreElement) {
+
+    reportScoreElement.textContent =
+        percentage;
+
+}
+
+
+/*
+    Motivasyon yazısı
+*/
+
+if (progressTextElement) {
+
+    if (percentage === 0) {
+
+        progressTextElement.textContent =
+            "Güne başlayalım.";
+
+    }
+
+    else if (percentage < 30) {
+
+        progressTextElement.textContent =
+            "Başlangıç yapıldı. Devam et.";
+
+    }
+
+    else if (percentage < 60) {
+
+        progressTextElement.textContent =
+            "İyi gidiyorsun. Planı bırakma.";
+
+    }
+
+    else if (percentage < 90) {
+
+        progressTextElement.textContent =
+            "Günün büyük kısmı tamamlandı.";
+
+    }
+
+    else if (percentage < 100) {
+
+        progressTextElement.textContent =
+            "Son görevler kaldı. Tamamla.";
+
+    }
+
+    else {
+
+        progressTextElement.textContent =
+            "★ BUGÜNÜN TÜM GÖREVLERİ TAMAMLANDI ★";
+
+    }
+
+}
+
+}
+
+/* =========================================================
+CHECKBOX EVENTLERİ
+========================================================= */
+
+checkboxes.forEach(
+(box) => {
+
+
+    box.addEventListener(
+        "change",
+        updateTasks
+    );
+
+}
+
+
+);
+
+/* =========================================================
+GÜN SONU DEĞERLENDİRMESİ
+========================================================= */
+
 function setEvaluation(answer) {
-    const result = document.getElementById("evaluationResult");
-    if (!result) return;
 
-    // Tüm görevler yapıldı mı kontrol et
-    const allCompleted = Array.from(checkboxes).every(box => box.checked);
 
-    if (answer === "evet") {
-        if (!allCompleted) {
-            result.textContent = "⚠ Tüm görevleri tamamlamadan günü başarılı kapatamazsın!";
-            return;
-        }
+if (!evaluationResultElement) {
+    return;
+}
 
-        result.textContent = "✓ Harika! Bugünkü planına sadık kaldın.";
-        localStorage.setItem("dailyEvaluation", "evet");
 
-        // Seri (Streak) Artırma İşlemi - Sadece gün kapandığında artar
-        if (lastCompletedDate !== currentDateKey) {
-            if (lastCompletedDate) {
-                const previousDate = new Date(lastCompletedDate);
-                const currentDate = new Date(currentDateKey);
-                // Gün farkını hesapla
-                const difference = Math.round((currentDate - previousDate) / (1000 * 60 * 60 * 24));
+/*
+    Bütün görevler tamamlandı mı?
+*/
 
-                if (difference === 1) {
-                    streak++; // Dün de yapmış, seriyi artır
-                } else if (difference > 1) {
-                    streak = 1; // Arada gün atlanmış, seriyi sıfırla ve 1'den başla
-                }
-            } else {
-                streak = 1; // İlk defa tamamlanıyor
+const allCompleted =
+    Array.from(
+        checkboxes
+    ).every(
+        box => box.checked
+    );
+
+
+/* EVET */
+
+if (answer === "evet") {
+
+    if (!allCompleted) {
+
+        evaluationResultElement.textContent =
+            "⚠ Tüm görevleri tamamlamadan günü başarılı kapatamazsın!";
+
+        return;
+    }
+
+
+    evaluationResultElement.textContent =
+        "✓ Harika! Bugünkü planına sadık kaldın.";
+
+
+    localStorage.setItem(
+        "dailyEvaluation",
+        "evet"
+    );
+
+
+    /*
+        Streak yalnızca
+        günü ilk defa kapattığında artar.
+    */
+
+    if (
+        lastCompletedDate !==
+        currentDateKey
+    ) {
+
+        if (lastCompletedDate) {
+
+            /*
+                YYYY-MM-DD değerlerini
+                güvenli şekilde tarihe çevir.
+            */
+
+            const previousDate =
+                new Date(
+                    `${lastCompletedDate}T00:00:00`
+                );
+
+            const currentDate =
+                new Date(
+                    `${currentDateKey}T00:00:00`
+                );
+
+
+            const difference =
+                Math.round(
+                    (
+                        currentDate -
+                        previousDate
+                    ) /
+                    (1000 * 60 * 60 * 24)
+                );
+
+
+            if (difference === 1) {
+
+                streak++;
+
             }
 
-            lastCompletedDate = currentDateKey;
-            localStorage.setItem("streak", streak);
-            localStorage.setItem("lastCompletedDate", lastCompletedDate);
-            updateStreakDisplay();
+            else if (difference > 1) {
+
+                streak = 1;
+
+            }
+
+            /*
+                Eğer fark 0 veya negatifse
+                streak tekrar artırılmaz.
+            */
+
         }
 
-    } else {
-        result.textContent = "→ Sorun değil. Yarın daha iyi bir plan uygula.";
-        localStorage.setItem("dailyEvaluation", "hayir");
+        else {
+
+            streak = 1;
+
+        }
+
+
+        lastCompletedDate =
+            currentDateKey;
+
+
+        localStorage.setItem(
+            "streak",
+            streak
+        );
+
+        localStorage.setItem(
+            "lastCompletedDate",
+            lastCompletedDate
+        );
+
+
+        updateStreakDisplay();
+
     }
+
 }
 
-// Kayıtlı değerlendirme varsa geri yükle
-const savedEvaluation = localStorage.getItem("dailyEvaluation");
-if (savedEvaluation) {
-    // Sadece arayüze yazdırmak için (streak'i tekrar artırmaması için kısa yol)
-    const result = document.getElementById("evaluationResult");
-    if (savedEvaluation === "evet") {
-        result.textContent = "✓ Harika! Bugünkü planına sadık kaldın.";
-    } else {
-        result.textContent = "→ Sorun değil. Yarın daha iyi bir plan uygula.";
-    }
+
+/* HAYIR */
+
+else if (answer === "hayir") {
+
+    evaluationResultElement.textContent =
+        "→ Sorun değil. Yarın daha iyi bir plan uygula.";
+
+    localStorage.setItem(
+        "dailyEvaluation",
+        "hayir"
+    );
+
 }
 
-// 7. GÜNÜ SIFIRLA BUTONU
+
+}
+
+/* =========================================================
+KAYITLI DEĞERLENDİRMEYİ YÜKLE
+========================================================= */
+
+function loadSavedEvaluation() {
+
+
+const savedEvaluation =
+    localStorage.getItem(
+        "dailyEvaluation"
+    );
+
+
+if (
+    !savedEvaluation ||
+    !evaluationResultElement
+) {
+    return;
+}
+
+
+if (savedEvaluation === "evet") {
+
+    evaluationResultElement.textContent =
+        "✓ Harika! Bugünkü planına sadık kaldın.";
+
+}
+
+else if (savedEvaluation === "hayir") {
+
+    evaluationResultElement.textContent =
+        "→ Sorun değil. Yarın daha iyi bir plan uygula.";
+
+}
+
+
+}
+
+/* =========================================================
+GÜNÜ SIFIRLA
+========================================================= */
+
 function resetDay() {
-    const confirmReset = confirm("Bugünkü tüm görevler sıfırlanacak. Emin misin?");
-    if (!confirmReset) return;
 
-    checkboxes.forEach(box => box.checked = false);
-    localStorage.removeItem("dailyTasks");
-    localStorage.removeItem("dailyEvaluation");
-    
-    const evaluationResult = document.getElementById("evaluationResult");
-    if (evaluationResult) evaluationResult.textContent = "";
 
-    updateTasks();
+const confirmReset =
+    window.confirm(
+        "Bugünkü tüm görevler sıfırlanacak. Emin misin?"
+    );
+
+
+if (!confirmReset) {
+    return;
 }
 
-// 8. SCROLL ANİMASYONU
-const timelineItems = document.querySelectorAll(".timeline-item");
 
-if ("IntersectionObserver" in window) {
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add("show");
-            }
-        });
-    }, { threshold: 0.15 });
+/*
+    Checkbox'ları temizle
+*/
 
-    timelineItems.forEach(item => observer.observe(item));
-} else {
-    timelineItems.forEach(item => item.classList.add("show"));
+checkboxes.forEach(
+    box => {
+        box.checked = false;
+    }
+);
+
+
+/*
+    Günlük kayıtları temizle
+*/
+
+localStorage.removeItem(
+    "dailyTasks"
+);
+
+localStorage.removeItem(
+    "dailyEvaluation"
+);
+
+
+/*
+    Değerlendirme yazısını temizle
+*/
+
+if (evaluationResultElement) {
+
+    evaluationResultElement.textContent =
+        "";
+
 }
 
-// Başlangıç değerlerini yükle
+
+/*
+    Arayüzü yeniden hesapla
+*/
+
 updateTasks();
+
+
+}
+
+/* =========================================================
+TIMELINE SCROLL ANİMASYONU
+========================================================= */
+
+const timelineItems =
+document.querySelectorAll(
+".timeline-item"
+);
+
+function initializeTimeline() {
+
+
+/*
+    Kullanıcı hareket azaltmayı
+    tercih ettiyse animasyon kullanma.
+*/
+
+const reducedMotion =
+    window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+
+if (
+    reducedMotion ||
+    !("IntersectionObserver" in window)
+) {
+
+    timelineItems.forEach(
+        item => {
+            item.classList.add("show");
+        }
+    );
+
+    return;
+}
+
+
+const observer =
+    new IntersectionObserver(
+        (entries) => {
+
+            entries.forEach(
+                entry => {
+
+                    if (
+                        entry.isIntersecting
+                    ) {
+
+                        entry.target.classList.add(
+                            "show"
+                        );
+
+                        /*
+                            Bir kere gösterildikten sonra
+                            tekrar gözlemlemeye gerek yok.
+                        */
+
+                        observer.unobserve(
+                            entry.target
+                        );
+
+                    }
+
+                }
+            );
+
+        },
+        {
+            threshold: 0.12
+        }
+    );
+
+
+timelineItems.forEach(
+    item => observer.observe(item)
+);
+
+
+}
+
+/* =========================================================
+ANALOG + DİJİTAL SAAT
+========================================================= */
+
+function updateAnalogClock() {
+
+
+if (
+    !hourHandElement ||
+    !minuteHandElement ||
+    !secondHandElement
+) {
+    return;
+}
+
+
+const now =
+    new Date();
+
+
+const seconds =
+    now.getSeconds();
+
+const milliseconds =
+    now.getMilliseconds();
+
+const minutes =
+    now.getMinutes();
+
+const hours =
+    now.getHours();
+
+
+/*
+    Daha akıcı saniye ibresi
+*/
+
+const exactSeconds =
+    seconds +
+    milliseconds / 1000;
+
+
+/*
+    İbre açıları
+*/
+
+const secondDegrees =
+    (exactSeconds / 60) * 360;
+
+
+const minuteDegrees =
+    (
+        (minutes + exactSeconds / 60) /
+        60
+    ) * 360;
+
+
+const hourDegrees =
+    (
+        (
+            (hours % 12) +
+            minutes / 60 +
+            exactSeconds / 3600
+        ) /
+        12
+    ) * 360;
+
+
+/*
+    İbreleri döndür
+*/
+
+secondHandElement.style.transform =
+    `rotate(${secondDegrees}deg)`;
+
+
+minuteHandElement.style.transform =
+    `rotate(${minuteDegrees}deg)`;
+
+
+hourHandElement.style.transform =
+    `rotate(${hourDegrees}deg)`;
+
+
+/*
+    Dijital saat
+*/
+
+if (innerDigitalElement) {
+
+    const digitalHour =
+        String(hours)
+            .padStart(2, "0");
+
+    const digitalMinute =
+        String(minutes)
+            .padStart(2, "0");
+
+
+    innerDigitalElement.textContent =
+        `${digitalHour}:${digitalMinute}`;
+
+}
+
+}
+
+/* =========================================================
+TARİH DEĞİŞİMİNİ KONTROL ET
+========================================================= */
+
+function checkForNewDay() {
+
+const now =
+    getToday();
+
+const newDateKey =
+    getDateKey(now);
+
+
+/*
+    Gece 00:00'dan sonra sayfa açık kalırsa
+    yeni günü algıla.
+*/
+
+if (
+    newDateKey !==
+    currentDateKey
+) {
+
+    location.reload();
+
+}
+
+}
+
+/* =========================================================
+BAŞLANGIÇ
+========================================================= */
+
+updateDateDisplay();
+
+updateTasks();
+
 updateStreakDisplay();
 
-// 9. ANALOG + DİJİTAL HİBRİT SAAT
-function updateAnalogClock() {
-    const hourHand = document.getElementById('hourHand');
-    const minuteHand = document.getElementById('minuteHand');
-    const secondHand = document.getElementById('secondHand');
-    const innerDigital = document.getElementById('innerDigital'); // Dijital ekranı seçtik
-    
-    if (!hourHand || !minuteHand || !secondHand) return;
+loadSavedEvaluation();
 
-    const now = new Date();
-    const seconds = now.getSeconds();
-    const minutes = now.getMinutes();
-    const hours = now.getHours();
+initializeTimeline();
 
-    // İbre açıları
-    const secondDegrees = (seconds / 60) * 360;
-    const minuteDegrees = ((minutes + seconds / 60) / 60) * 360;
-    const hourDegrees = ((hours % 12 + minutes / 60) / 12) * 360;
+updateAnalogClock();
 
-    // CSS transform ile ibreleri döndür
-    secondHand.style.transform = `rotate(${secondDegrees}deg)`;
-    minuteHand.style.transform = `rotate(${minuteDegrees}deg)`;
-    hourHand.style.transform = `rotate(${hourDegrees}deg)`;
+/*
+Saat güncelleme.
+requestAnimationFrame kullanımı sayesinde
+saniye ibresi daha akıcı hareket eder.
+*/
 
-    // Dijital ekranı güncelle (Örn: 14:05)
-    if (innerDigital) {
-        const digitalH = String(hours).padStart(2, '0');
-        const digitalM = String(minutes).padStart(2, '0');
-        innerDigital.textContent = `${digitalH}:${digitalM}`;
-    }
+let lastClockUpdate = 0;
+
+function clockLoop(timestamp) {
+
+if (
+    timestamp - lastClockUpdate >= 100
+) {
+
+    updateAnalogClock();
+
+    lastClockUpdate =
+        timestamp;
+
 }
 
-// Saati başlat ve saniyede bir güncelle
-updateAnalogClock();
-setInterval(updateAnalogClock, 1000);
+
+requestAnimationFrame(
+    clockLoop
+);
+
+}
+
+requestAnimationFrame(
+clockLoop
+);
+
+/*
+Gece yarısını kontrol et.
+*/
+
+setInterval(
+checkForNewDay,
+30 * 1000
+);
