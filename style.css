@@ -14,7 +14,8 @@ TEMEL AYARLAR
   }
 
 html {
-scroll-behavior: smooth;
+    background-color: #101210;
+    overscroll-behavior: none;
 }
 
 body {
