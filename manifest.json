@@ -1,0 +1,15 @@
+{
+  "name": "Günlük Disiplin Paneli",
+  "short_name": "Disiplin",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#101210",
+  "theme_color": "#151815",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/763/763331.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
