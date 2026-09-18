@@ -7,7 +7,7 @@
   "theme_color": "#151815",
   "icons": [
     {
-      "src": "./Flag_of_Turkey.png",
+      "src": "./yildiz.png",
       "sizes": "512x512",
       "type": "image/png"
     }
