@@ -7,7 +7,7 @@
   "theme_color": "#151815",
   "icons": [
     {
-      "src": "Atatürk.png",
+      "src": "./Ataturk.png",
       "sizes": "512x512",
       "type": "image/png"
     }

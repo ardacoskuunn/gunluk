@@ -439,40 +439,30 @@ if (!evaluationResultElement) {
     return;
 }
 
-
 /*
-    Bütün görevler tamamlandı mı?
-*/
+        Görevlerin durumunu kontrol et
+    */
+    const completedTasksCount =
+        Array.from(
+            checkboxes
+        ).filter(
+            box => box.checked
+        ).length;
 
-const allCompleted =
-    Array.from(
-        checkboxes
-    ).every(
-        box => box.checked
-    );
+    /* EVET */
+    if (answer === "evet") {
 
+        /* YENİ KURAL: Sadece 1 görev atlama hakkı (Örn: 14 görev varsa en az 13'ü bitmeli) */
+        if (completedTasksCount < (totalCount - 1)) {
 
-/* EVET */
+            evaluationResultElement.textContent =
+                "⚠ Günü başarılı kapatmak için en fazla 1 görevi es geçebilirsin!";
 
-if (answer === "evet") {
-
-    if (!allCompleted) {
+            return;
+        }
 
         evaluationResultElement.textContent =
-            "⚠ Tüm görevleri tamamlamadan günü başarılı kapatamazsın!";
-
-        return;
-    }
-
-
-    evaluationResultElement.textContent =
-        "✓ Harika! Bugünkü planına sadık kaldın.";
-
-
-    localStorage.setItem(
-        "dailyEvaluation",
-        "evet"
-    );
+            "✓ Harika! Bugünkü planına sadık kaldın.";
 
 
     /*
