@@ -7,56 +7,39 @@ JAVASCRIPT
 ELEMENTLER
 ========================================================= */
 
-const currentDateElement =
-document.getElementById("currentDate");
+const currentDateElement = document.getElementById("currentDate");
 
-const checkboxes =
-document.querySelectorAll(".routine-cb");
+let checkboxes = document.querySelectorAll(".routine-cb");
 
-const totalCount =
-checkboxes.length;
+let totalCount = checkboxes.length;
 
-const totalCountElement =
-document.getElementById("totalCount");
+const totalCountElement = document.getElementById("totalCount");
 
-const scoreElement =
-document.getElementById("score");
+const scoreElement = document.getElementById("score");
 
-const completedCountElement =
-document.getElementById("completedCount");
+const completedCountElement = document.getElementById("completedCount");
 
-const progressFillElement =
-document.getElementById("progressFill");
+const progressFillElement = document.getElementById("progressFill");
 
-const progressTextElement =
-document.getElementById("progressText");
+const progressTextElement = document.getElementById("progressText");
 
-const reportCompletedElement =
-document.getElementById("reportCompleted");
+const reportCompletedElement = document.getElementById("reportCompleted");
 
-const reportRemainingElement =
-document.getElementById("reportRemaining");
+const reportRemainingElement = document.getElementById("reportRemaining");
 
-const reportScoreElement =
-document.getElementById("reportScore");
+const reportScoreElement = document.getElementById("reportScore");
 
-const evaluationResultElement =
-document.getElementById("evaluationResult");
+const evaluationResultElement = document.getElementById("evaluationResult");
 
-const streakElement =
-document.getElementById("streak");
+const streakElement = document.getElementById("streak");
 
-const innerDigitalElement =
-document.getElementById("innerDigital");
+const innerDigitalElement = document.getElementById("innerDigital");
 
-const hourHandElement =
-document.getElementById("hourHand");
+const hourHandElement = document.getElementById("hourHand");
 
-const minuteHandElement =
-document.getElementById("minuteHand");
+const minuteHandElement = document.getElementById("minuteHand");
 
-const secondHandElement =
-document.getElementById("secondHand");
+const secondHandElement = document.getElementById("secondHand");
 
 /* =========================================================
 TARİH
@@ -187,27 +170,24 @@ checkboxes.forEach(
 /* =========================================================
 STREAK
 ========================================================= */
+let streak = Number(localStorage.getItem("streak")) || 0;
+let lastCompletedDate = localStorage.getItem("lastCompletedDate");
 
-let streak =
-Number(
-localStorage.getItem("streak")
-) || 0;
-
-let lastCompletedDate =
-localStorage.getItem(
-"lastCompletedDate"
-);
-
-function updateStreakDisplay() {
-
-
-if (!streakElement) {
-    return;
+/* KATI KURAL: Dün pas geçildiyse seriyi acımadan sıfırla */
+if (lastCompletedDate) {
+    const previousDate = new Date(`${lastCompletedDate}T00:00:00`);
+    const currDate = new Date(`${currentDateKey}T00:00:00`);
+    const difference = Math.round((currDate - previousDate) / (1000 * 60 * 60 * 24));
+    
+    if (difference > 1) {
+        streak = 0;
+        localStorage.setItem("streak", 0);
+    }
 }
 
-streakElement.textContent =
-    streak;
-
+function updateStreakDisplay() {
+    if (!streakElement) return;
+    streakElement.textContent = streak;
 }
 
 /* =========================================================
@@ -886,58 +866,53 @@ if (
 }
 
 /* =========================================================
+GÜN TÜRÜNÜ BELİRLE (HAFTA İÇİ / HAFTA SONU)
+========================================================= */
+function setupTasksForToday() {
+    const dayOfWeek = getToday().getDay(); // 0: Pazar, 6: Cumartesi
+    const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+
+    const weekendBoxes = document.querySelectorAll(".weekend-box");
+    const weekdayBoxes = document.querySelectorAll(".weekday-box");
+
+    weekendBoxes.forEach(box => box.style.display = isWeekend ? "" : "none");
+    weekdayBoxes.forEach(box => box.style.display = isWeekend ? "none" : "");
+
+    const allTaskLabels = document.querySelectorAll(".task-check");
+    allTaskLabels.forEach(label => {
+        if (label.classList.contains("weekend-only")) {
+            label.style.display = isWeekend ? "flex" : "none";
+        } else if (label.classList.contains("weekday-only")) {
+            label.style.display = isWeekend ? "none" : "flex";
+        } else {
+            if(label.style.display === "none") label.style.display = "flex"; 
+        }
+    });
+
+    checkboxes = Array.from(document.querySelectorAll(".routine-cb")).filter(cb => cb.offsetParent !== null);
+    totalCount = checkboxes.length;
+    
+    if (totalCountElement) totalCountElement.textContent = totalCount;
+}
+
+/* =========================================================
 BAŞLANGIÇ
 ========================================================= */
-
 updateDateDisplay();
-
+setupTasksForToday();
 updateTasks();
-
 updateStreakDisplay();
-
 loadSavedEvaluation();
-
 initializeTimeline();
-
 updateAnalogClock();
 
-/*
-Saat güncelleme.
-requestAnimationFrame kullanımı sayesinde
-saniye ibresi daha akıcı hareket eder.
-*/
-
 let lastClockUpdate = 0;
-
 function clockLoop(timestamp) {
-
-if (
-    timestamp - lastClockUpdate >= 100
-) {
-
-    updateAnalogClock();
-
-    lastClockUpdate =
-        timestamp;
-
+    if (timestamp - lastClockUpdate >= 100) {
+        updateAnalogClock();
+        lastClockUpdate = timestamp;
+    }
+    requestAnimationFrame(clockLoop);
 }
-
-
-requestAnimationFrame(
-    clockLoop
-);
-
-}
-
-requestAnimationFrame(
-clockLoop
-);
-
-/*
-Gece yarısını kontrol et.
-*/
-
-setInterval(
-checkForNewDay,
-30 * 1000
-);
+requestAnimationFrame(clockLoop);
+setInterval(checkForNewDay, 30 * 1000);
