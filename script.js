@@ -883,7 +883,7 @@ function setupTasksForToday() {
         if (label.classList.contains("weekend-only")) {
             label.style.display = isWeekend ? "flex" : "none";
         } else if (label.classList.contains("weekday-only")) {
-            label.style.display = isWeekend ? "none" : "flex";
+            label.style.display = isWeekend ? "none" : "flex"; // İŞTE ARADIĞIN KOD BURADA!
         } else {
             if(label.style.display === "none") label.style.display = "flex"; 
         }
@@ -899,7 +899,7 @@ function setupTasksForToday() {
 BAŞLANGIÇ
 ========================================================= */
 updateDateDisplay();
-setupTasksForToday();
+setupTasksForToday(); /* Motor burada çalışıyor */
 updateTasks();
 updateStreakDisplay();
 loadSavedEvaluation();
